@@ -13,8 +13,8 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "availability_zone" {
-  description = "Used to find the default subnet"
+variable "az_to_find_subnet" {
+  description = "Used to find the default subnet (ignored if subnet_id is provided)"
   default     = "us-east-1c"
 }
 
@@ -24,7 +24,7 @@ variable "subnet_id" {
 }
 
 variable "windows_version" {
-  description = "Version of Windows Server to use (one of 2008, 2012, 2016)"
+  description = "Version of Windows Server to use (options are 2008, 2012, 2016)"
   default     = "2016"
 }
 
@@ -51,4 +51,29 @@ variable "instance_type" {
 variable "userdata_log" {
   description = "Where to log results of instance initialization"
   default     = "C:\\Temp\\userdata.log"
+}
+
+variable "create_key_files" {
+  description = "Whether to create public and private key files in .godsaker/"
+  default     = "true"
+}
+
+variable "name_prefix" {
+  description = "Prefix used in naming and tagging resources"
+  default     = "godsaker"
+}
+
+variable "pypi_url" {
+  description = "PyPI URL to use for downloading Python packages"
+  default     = "https://pypi.org/simple"
+}
+
+variable "download_dir" {
+  description = "Directory on EC2 instance for downloading binaries"
+  default     = "C:\\Users\\Administrator\\Downloads"
+}
+
+variable "temp_dir" {
+  description = "Directory on EC2 instance for temporary files"
+  default     = "C:\\Temp"
 }

@@ -242,8 +242,40 @@ function Reset-EnvironmentVariables {
     } | Set-Content -Path { "Env:$($_.Name)" }
   }
 }
+ 
+function Test-URI {
+  Param( [string]$Url )
+   
+  Write-Tfi "Testing $Url"
+  Try {
+    #hash table of parameter values for Invoke-Webrequest
+    $paramHash = @{
+      UseBasicParsing = $True
+      DisableKeepAlive = $True
+      Uri = $Url
+      Method = 'Head'
+      ErrorAction = 'stop'
+      TimeoutSec = 15
+    }
+    $test = Invoke-WebRequest @paramHash
+
+    if ($test.statuscode -eq 200) {
+      $True
+    }
+  }
+  Catch {
+    Write-Tfi ("Failed: {0}" -f $_.exception)
+    $False
+  }
+}
 
 function Install-Python {
+
+  # python 2 named differently that python 3
+  if (!( Test-URI -Url $${PythonUrl} )) {
+    $${PythonUrl} = $${PythonUrl} -replace "-amd64.exe",".amd64.msi"
+  }
+
   $PythonFile = "$${SaveDir}\$($${PythonUrl}.split("/")[-1])"
 
   Download-File -Url $${PythonUrl} -SavePath $${PythonFile}

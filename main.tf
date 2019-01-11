@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "${var.aws_region}"
+}
+
 # AMIs and AMI keys - data structures to represent, no user input considered... yet
 locals {
   windows_versions = ["2008", "2012", "2016"]
@@ -12,9 +16,6 @@ locals {
   ami_owners = ["801119661308"]
 
   ami_virtualization_type = "hvm"
-
-  python_url = "https://www.python.org/ftp/python/${var.python_version}/python-${var.python_version}-amd64.exe"
-  git_url    = "https://github.com/git-for-windows/git/releases/download/v${var.git_for_win_version}.windows.1/Git-${var.git_for_win_version}-64-bit.exe"
 }
 
 # security and networking ===========================
@@ -54,11 +55,11 @@ resource "random_string" "password" {
 
 resource "random_id" "godsaker" {
   byte_length = 5
-  prefix      = "godsaker-"
+  prefix      = "${var.name_prefix}-"
 }
 
 resource "aws_default_subnet" "godsaker" {
-  availability_zone = "${var.availability_zone}"
+  availability_zone = "${var.az_to_find_subnet}"
 }
 
 # Security group to access the instances over WinRM
@@ -145,7 +146,7 @@ resource "aws_instance" "godsaker" {
   }
 
   provisioner "file" {
-    source      = "python_test.ps1"
+    content     = "${data.http.verify_instance.body}"
     destination = "C:\\scripts\\python_test.ps1"
   }
 
@@ -163,20 +164,42 @@ resource "aws_instance" "godsaker" {
   }
 }
 
+data "http" "verify_instance" {
+  url = "https://raw.githubusercontent.com/YakDriver/terraform-aws-win-python-ec2/master/python_test.ps1"
+}
+
 # userdata ===========================
+data "http" "userdata" {
+  url = "https://raw.githubusercontent.com/YakDriver/terraform-aws-win-python-ec2/master/userdata.ps1"
+}
+
 data "template_file" "userdata" {
   count    = 1
-  template = "${file("userdata.ps1")}"
+  template = "${data.http.userdata.body}"
 
   vars {
-    download_dir  = "${local.download_dir}"
-    seven_zip_url = "${local.seven_zip_url}"
-    git_url       = "${local.git_url}"
-    pypi_url      = "${local.pypi_url}"
-    python_url    = "${local.python_url}"
+    download_dir  = "${var.download_dir}"
+    seven_zip_url = "https://www.7-zip.org/a/7z1806-x64.exe"
+    git_url       = "https://github.com/git-for-windows/git/releases/download/v${var.git_for_win_version}.windows.1/Git-${var.git_for_win_version}-64-bit.exe"
+    pypi_url      = "${var.pypi_url}"
+    # https://www.python.org/ftp/python/2.7.15/python-2.7.15.amd64.msi
+    python_url    = "https://www.python.org/ftp/python/${var.python_version}/python-${var.python_version}-amd64.exe"
     adm_pass      = "${random_string.password.result}"
     adm_user      = "${var.adm_user}"
-    temp_dir      = "${local.temp_dir}"
+    temp_dir      = "${var.temp_dir}"
     userdata_log  = "${var.userdata_log}"
   }
+}
+
+# local files for key pairs ================================
+resource "local_file" "public" {
+  count    = "${var.create_key_files == "true" ? 1 : 0}"
+  content  = "${tls_private_key.gen_key.public_key_openssh}"
+  filename = ".godsaker/id_rsa_${random_id.godsaker.b64_url}.pub"
+}
+
+resource "local_file" "private" {
+  count    = "${var.create_key_files == "true" ? 1 : 0}"
+  content  = "${tls_private_key.gen_key.private_key_pem}"
+  filename = ".godsaker/id_rsa_${random_id.godsaker.b64_url}.pem"
 }

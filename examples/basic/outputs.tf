@@ -1,60 +1,60 @@
 output "ami_id" {
   description = "ID of AMI used to launch instance"
-  value       = "${data.aws_ami.find_ami.id}"
+  value       = "${module.ec2_with_python_and_git.ami_id}"
 }
 
 output "ami_name" {
   description = "Name of AMI used to launch instance"
-  value       = "${data.aws_ami.find_ami.name}"
+  value       = "${module.ec2_with_python_and_git.ami_name}"
 }
 
 output "win_pass" {
   description = "Randomly generated password assigned to Admin account"
-  value       = "${random_string.password.result}"
+  value       = "${module.ec2_with_python_and_git.win_pass}"
   sensitive   = true
 }
 
 output "public_dns" {
   description = "Public DNS name assigned to the instance"
-  value       = "${aws_instance.godsaker.public_dns}"
+  value       = "${module.ec2_with_python_and_git.public_dns}"
 }
 
 output "public_ip" {
   description = "Public IP assigned to the instance"
-  value       = "${aws_instance.godsaker.public_ip}"
+  value       = "${module.ec2_with_python_and_git.public_ip}"
 }
 
 output "instance_id" {
   description = "ID of EC2 instance"
-  value       = "${aws_instance.godsaker.id}"
+  value       = "${module.ec2_with_python_and_git.instance_id}"
 }
 
 output "key_pair_name" {
   description = "Name of the key pair generated for instance"
-  value       = "${aws_key_pair.auth.id}"
+  value       = "${module.ec2_with_python_and_git.key_pair_name}"
 }
 
 output "security_group_id" {
   description = "ID of the security group for the instance"
-  value       = "${aws_security_group.win_sg.id}"
+  value       = "${module.ec2_with_python_and_git.security_group_id}"
 }
 
 output "vpc_security_group_id" {
   description = "ID of the VPC security group"
-  value       = ["${aws_instance.godsaker.vpc_security_group_ids}"]
+  value       = ["${module.ec2_with_python_and_git.vpc_security_group_id}"]
 }
 
 output "subnet_id" {
   description = "ID of the subnet"
-  value       = "${aws_instance.godsaker.subnet_id}"
+  value       = "${module.ec2_with_python_and_git.subnet_id}"
 }
 
 output "vpc_id" {
   description = "ID of the VPC"
-  value       = "${aws_security_group.win_sg.vpc_id}"
+  value       = "${module.ec2_with_python_and_git.vpc_id}"
 }
 
 output "aws_region" {
   description = "Region used by the module"
-  value       = "${var.aws_region}"
+  value       = "${module.ec2_with_python_and_git.aws_region}"
 }
