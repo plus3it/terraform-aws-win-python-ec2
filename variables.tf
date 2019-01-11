@@ -1,43 +1,54 @@
 variable "python_version" {
-  default = "3.7.2"
+  description = "Desired version of Python"
+  default     = "3.7.2"
 }
 
 variable "git_for_win_version" {
-  default = "2.20.1"
+  description = "Desired version of Git for Windows"
+  default     = "2.20.1"
 }
 
 variable "aws_region" {
-  default = "us-east-1"
+  description = "AWS Region"
+  default     = "us-east-1"
 }
 
 variable "availability_zone" {
-  default = "us-east-1c"
+  description = "Used to find the default subnet"
+  default     = "us-east-1c"
 }
 
 variable "subnet_id" {
-  default = ""
+  description = "ID of subnet to use (or default if blank)"
+  default     = ""
 }
 
 variable "windows_version" {
-  default = "2016"
+  description = "Version of Windows Server to use (one of 2008, 2012, 2016)"
+  default     = "2016"
 }
 
 variable "adm_user" {
-  default = "Administrator"
+  description = "User name of the admin account"
+  default     = "Administrator"
 }
 
 variable "instance_profile" {
-  default = ""
+  description = "IAM profile used for launching the instance"
+  default     = ""
 }
 
 variable "assign_public_ip" {
-  default = "false"
+  description = "Whether to assign a public IP"
+  default     = "false"
 }
 
 variable "instance_type" {
-  default = "t2.medium"
+  description = "EC2 instance type"
+  default     = "t2.medium"
 }
 
 variable "userdata_log" {
-  default = "C:\\Temp\\userdata.log"
+  description = "Where to log results of instance initialization"
+  default     = "C:\\Temp\\userdata.log"
 }
