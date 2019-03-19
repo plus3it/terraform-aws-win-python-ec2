@@ -5,7 +5,7 @@ variable "python_version" {
 
 variable "git_for_win_version" {
   description = "Desired version of Git for Windows"
-  default     = "2.20.1"
+  default     = "2.21.0"
 }
 
 variable "aws_region" {
