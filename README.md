@@ -12,16 +12,16 @@ Without any required input, the module creates everything you need for a quick e
 ## Usage
 
 ```hcl
-module "ec2_cluster" {
-  source                 = ""YakDriver/win-python-ec2/aws""
-  version                = "1.0.1"
+module "win-python-ec2" {
+  source                 = "plus3it/win-python-ec2/aws"
+  version                = "1.0.2"
 }
 ```
 
 ## Examples
 
-* [Basic Python EC2 instance](https://github.com/YakDriver/terraform-aws-win-python-ec2/tree/master/examples/basic)
-* [Non-Default Python EC2 instance](https://github.com/YakDriver/terraform-aws-win-python-ec2/tree/master/examples/non_default)
+* [Basic Python EC2 instance](https://github.com/plus3it/terraform-aws-win-python-ec2/tree/master/examples/basic)
+* [Non-Default Python EC2 instance](https://github.com/plus3it/terraform-aws-win-python-ec2/tree/master/examples/non_default)
 
 ## Networking
 
@@ -31,7 +31,7 @@ To place the EC2 instance in a specific subnet, provide the ID in the `subnet_id
 
 The module provides these security features:
 
-* Assignment of the a randomly generated 16-character password with at least 2 upper, 2 lower, 2 special, and 2 numeric characters to the EC2 instance administrator account. The password is marked sensitive in Terraform and will be redacted in logs and the initial output from the module. **To see the password**, type `terraform output win_pass`.
+* Assignment of the a randomly generated 16-character password with at least 2 upper, 2 lower, 2 special, and 2 numeric characters to the EC2 instance administrator account. The password is marked sensitive in Terraform and will be redacted in logs and the initial output from the module. Given the above module name, **to see the password**, type `terraform output module.win-python-ec2.win_pass`.
 * Generation of a fresh 4096-bit RSA key pair just for the instance (the public and private keys are only saved to the `.godsaker/` directory, locally where Terraform is run).
 * Creation of a new security group for the EC2 instance only allowing RDP and WinRM access for the IP address where Terraform is run
 

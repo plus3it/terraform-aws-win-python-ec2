@@ -165,12 +165,12 @@ resource "aws_instance" "godsaker" {
 }
 
 data "http" "verify_instance" {
-  url = "https://raw.githubusercontent.com/YakDriver/terraform-aws-win-python-ec2/master/python_test.ps1"
+  url = "https://raw.githubusercontent.com/plus3it/terraform-aws-win-python-ec2/master/python_test.ps1"
 }
 
 # userdata ===========================
 data "http" "userdata" {
-  url = "https://raw.githubusercontent.com/YakDriver/terraform-aws-win-python-ec2/master/userdata.ps1"
+  url = "https://raw.githubusercontent.com/plus3it/terraform-aws-win-python-ec2/master/userdata.ps1"
 }
 
 data "template_file" "userdata" {
