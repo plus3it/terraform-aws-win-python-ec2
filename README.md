@@ -1,3 +1,5 @@
+[![pullreminders](https://pullreminders.com/badge.svg)](https://pullreminders.com?ref=badge)
+
 # AWS EC2 Instance Windows Python module
 
 Terraform module which creates an AWS Windows Server EC2 instance installed with Python and Git.
